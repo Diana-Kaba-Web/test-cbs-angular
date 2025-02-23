@@ -1,0 +1,27 @@
+<!-- FORM ADD AUTHOR -->
+<div class="container mt-4 p-5 d-none author-form">
+    <h3>Додавання автора</h3>
+    <form id="author-form" class="mb-4">
+        <div class="mb-3">
+            <label for="author-lastname" class="form-label">Прізвище</label>
+            <input type="text" id="author-lastname" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="author-firstname" class="form-label">Ім'я</label>
+            <input type="text" id="author-firstname" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="author-middlename" class="form-label">По батькові</label>
+            <input type="text" id="author-middlename" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="author-yearbirth" class="form-label">Рік народження</label>
+            <input type="number" id="author-yearbirth" class="form-control" required>
+            <div class="mt-2 alert alert-danger d-none" id="error-year">Помилка! Введіть рік від 1500 до поточного року.
+            </div>
+        </div>
+        <button class="btn btn-primary hide-author-form m-1">Сховати форму</button>
+        <button type="submit" class="btn btn-primary m-1">Додати автора</button>
+    </form>
+</div>
+<!-- /FORM ADD AUTHOR -->
