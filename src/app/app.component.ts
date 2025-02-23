@@ -5,6 +5,7 @@ import { Book } from './classes/books';
 import { Genre } from './classes/genre';
 import { DetailsService } from './services/details.service';
 import { FormsService } from './services/forms.service';
+import { ListenersService } from './services/listeners.service';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +20,10 @@ export class AppComponent {
   books: Book[] = [];
 
   constructor(
-    private authorsService: AuthorsService, 
+    private authorsService: AuthorsService,
     private detailsService: DetailsService,
-    private formsService: FormsService ) { }
+    private formsService: FormsService,
+    private listenersService: ListenersService ) { }
 
   fillStaticInfo() {
     const author1 = new Author("Шевченко", "Тарас", 1564, "Григорович");
@@ -55,12 +57,7 @@ export class AppComponent {
     this.fillStaticInfo();
     this.authorsService.makeRows(this.authors);
 
-    document.querySelectorAll(".btn-details").forEach(btn => {
-      btn.addEventListener('click', (event) => {
-        const authorIndex = Number((event.currentTarget as HTMLElement).getAttribute("data-author-index"));
-        this.detailsService.showAuthorDetails(this.authors, authorIndex);
-      });
-    });
+    this.listenersService.addListeners(this.authors); 
 
     const btnHide = document.querySelector(".btn-hide");
     if (!btnHide) return;
@@ -75,9 +72,9 @@ export class AppComponent {
     hideAuthor.addEventListener("click", this.formsService.hideAuthorForm);
 
     const authorForm = document.getElementById("author-form");
-    if(!authorForm) return;
+    if (!authorForm) return;
     authorForm.addEventListener("submit", (event) => {
       this.authorsService.addAuthor(event, this.authors);
-  });
+    });
   }
 }
