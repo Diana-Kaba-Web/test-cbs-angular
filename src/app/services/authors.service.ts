@@ -10,7 +10,7 @@ export class AuthorsService {
 
   constructor(
     private listenersService: ListenersService,
-    private localstorageService: LocalstorageService ) { }
+    private localstorageService: LocalstorageService) { }
 
   makeRows(authors: Author[]) {
     const authorTable = document.querySelector("tbody");
@@ -106,6 +106,11 @@ export class AuthorsService {
       this.makeRows(authors);
       this.listenersService.addListeners(authors);
     }
+  }
+
+  sortAuthors(authors: Author[]) {
+    authors.sort((a, b) => a.firstName.localeCompare(b.firstName));
+    this.makeRows(authors);
   }
 
   validateTextField(value: string, pattern: string, fieldName: string) {

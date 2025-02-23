@@ -83,5 +83,9 @@ export class AppComponent {
     authorForm.addEventListener("submit", (event) => {
       this.authorsService.addAuthor(event, this.authors);
     });
+
+    const sortAuthors = document.querySelector('.sort-authors');
+    if (!sortAuthors) return;
+    sortAuthors.addEventListener('click', () => this.authorsService.sortAuthors(this.authors));
   }
 }
