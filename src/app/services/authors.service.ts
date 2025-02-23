@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Author } from '../classes/author';
 import { ListenersService } from './listeners.service';
+import { LocalstorageService } from './localstorage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorsService {
 
-  constructor(private listenersService: ListenersService) { }
+  constructor(
+    private listenersService: ListenersService,
+    private localstorageService: LocalstorageService ) { }
 
   makeRows(authors: Author[]) {
     const authorTable = document.querySelector("tbody");
@@ -81,7 +84,7 @@ export class AuthorsService {
     const newAuthor = new Author(lastName.value.trim(), firstName.value.trim(), +yearDate.value, middleName.value.trim());
     authors.push(newAuthor);
 
-    // saveToLocalStorage(authors);
+    this.localstorageService.saveToLocalStorage(authors);
     this.makeRow(authors);
     this.populateAuthorDropdown(authors);
     this.listenersService.addListeners(authors);
@@ -99,7 +102,7 @@ export class AuthorsService {
     const isSure = confirm("Ви точно бажаєте видалити автора?");
     if (isSure) {
       authors.splice(index, 1);
-      // saveToLocalStorage(authors);
+      this.localstorageService.saveToLocalStorage(authors);
       this.makeRows(authors);
       this.listenersService.addListeners(authors);
     }
