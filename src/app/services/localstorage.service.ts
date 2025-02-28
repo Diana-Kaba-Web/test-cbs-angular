@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Author } from '../classes/author';
 import { Book } from '../classes/books';
+import { Genre } from '../classes/genre';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,14 @@ export class LocalstorageService {
 
   saveToLocalStorage(authors: Author[]) {
     localStorage.setItem("authors", JSON.stringify(authors));
+  }
+
+  loadGenresFromLocalStorage() {
+    const savedGenres = localStorage.getItem("genres");
+    return savedGenres ? JSON.parse(savedGenres) : [];
+  }
+
+  saveGenresToLocalStorage(genres: Genre[]) {
+    localStorage.setItem("genres", JSON.stringify(genres));
   }
 }

@@ -8,6 +8,7 @@ import { FormsService } from './services/forms.service';
 import { ListenersService } from './services/listeners.service';
 import { LocalstorageService } from './services/localstorage.service';
 import { BooksService } from './services/books.service';
+import { GenresService } from './services/genres.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent {
     private formsService: FormsService,
     private listenersService: ListenersService,
     private localstorageService: LocalstorageService,
-    private booksService: BooksService) { }
+    private booksService: BooksService,
+    private genresService: GenresService) { }
 
   fillStaticInfo() {
     if (this.authors.length === 0 && this.genres.length === 0) {
@@ -45,6 +47,8 @@ export class AppComponent {
       this.genres.push(genre1);
       this.genres.push(genre2);
       this.genres.push(genre3);
+
+      this.localstorageService.saveGenresToLocalStorage(this.genres);
 
       const book1 = new Book("Кобзар", 256, genre1.name);
       const book2 = new Book("Катерина", 164, genre1.name);
@@ -65,10 +69,11 @@ export class AppComponent {
     this.authors = this.localstorageService.loadFromLocalStorage();
     this.fillStaticInfo();
     this.authorsService.makeRows(this.authors);
+
     this.authorsService.populateAuthorDropdown(this.authors);
+    this.genresService.populateGenreDropdown(this.genres, 'book-genre');
 
     this.listenersService.addListeners(this.authors);
-
 
     const btnHide = document.querySelector(".btn-hide");
     if (!btnHide) return;
@@ -94,15 +99,23 @@ export class AppComponent {
 
     const addBook = document.querySelector(".add-book");
     const hideBook = document.querySelector(".hide-book-form");
-    if(!addBook) return;
-    if(!hideBook) return;
+    if (!addBook) return;
+    if (!hideBook) return;
     addBook.addEventListener("click", this.booksService.showBookForm);
     hideBook.addEventListener("click", this.booksService.hideBookForm);
 
     const bookForm = document.getElementById("book-form");
-    if(!bookForm) return;
+    if (!bookForm) return;
     bookForm.addEventListener("submit", (event) => {
       this.booksService.addBook(event, this.authors, this.genres);
-  });
+    });
+
+    const showGenres = document.querySelector('.show-genres');
+    if(!showGenres) return;
+    showGenres.addEventListener('click', () => this.genresService.showGenres());
+
+    const hideGenre = document.querySelector('.hide-list');
+    if(!hideGenre) return;
+    hideGenre.addEventListener('click', this.genresService.hideListOfGenres);
   }
 }

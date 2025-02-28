@@ -8,6 +8,7 @@ import { DetailsComponent } from './components/details/details.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { AddAuthorComponent } from './components/add-author/add-author.component';
 import { AddBookComponent } from './components/add-book/add-book.component';
+import { GenresComponent } from './components/genres/genres.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { AddBookComponent } from './components/add-book/add-book.component';
     DetailsComponent,
     ButtonsComponent,
     AddAuthorComponent,
-    AddBookComponent
+    AddBookComponent,
+    GenresComponent
   ],
   imports: [
     BrowserModule,
