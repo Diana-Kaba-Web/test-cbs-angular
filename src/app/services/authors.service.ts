@@ -111,6 +111,7 @@ export class AuthorsService {
   sortAuthors(authors: Author[]) {
     authors.sort((a, b) => a.firstName.localeCompare(b.firstName));
     this.makeRows(authors);
+    this.listenersService.addListeners(authors);
   }
 
   validateTextField(value: string, pattern: string, fieldName: string) {

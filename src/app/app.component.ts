@@ -7,6 +7,7 @@ import { DetailsService } from './services/details.service';
 import { FormsService } from './services/forms.service';
 import { ListenersService } from './services/listeners.service';
 import { LocalstorageService } from './services/localstorage.service';
+import { BooksService } from './services/books.service';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,8 @@ export class AppComponent {
     private detailsService: DetailsService,
     private formsService: FormsService,
     private listenersService: ListenersService,
-    private localstorageService: LocalstorageService) { }
+    private localstorageService: LocalstorageService,
+    private booksService: BooksService) { }
 
   fillStaticInfo() {
     if (this.authors.length === 0 && this.genres.length === 0) {
@@ -63,8 +65,10 @@ export class AppComponent {
     this.authors = this.localstorageService.loadFromLocalStorage();
     this.fillStaticInfo();
     this.authorsService.makeRows(this.authors);
+    this.authorsService.populateAuthorDropdown(this.authors);
 
     this.listenersService.addListeners(this.authors);
+
 
     const btnHide = document.querySelector(".btn-hide");
     if (!btnHide) return;
@@ -87,5 +91,18 @@ export class AppComponent {
     const sortAuthors = document.querySelector('.sort-authors');
     if (!sortAuthors) return;
     sortAuthors.addEventListener('click', () => this.authorsService.sortAuthors(this.authors));
+
+    const addBook = document.querySelector(".add-book");
+    const hideBook = document.querySelector(".hide-book-form");
+    if(!addBook) return;
+    if(!hideBook) return;
+    addBook.addEventListener("click", this.booksService.showBookForm);
+    hideBook.addEventListener("click", this.booksService.hideBookForm);
+
+    const bookForm = document.getElementById("book-form");
+    if(!bookForm) return;
+    bookForm.addEventListener("submit", (event) => {
+      this.booksService.addBook(event, this.authors, this.genres);
+  });
   }
 }

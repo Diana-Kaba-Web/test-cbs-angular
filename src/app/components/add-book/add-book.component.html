@@ -1,0 +1,30 @@
+<!-- FORM ADD BOOK -->
+<div class="container mt-4 p-5 d-none book-form">
+    <h3>Додати книгу</h3>
+    <form id="book-form">
+        <div class="mb-3">
+            <label for="book-title" class="form-label">Назва книги</label>
+            <input type="text" id="book-title" class="form-control" required>
+            <div class="mt-2 alert alert-danger d-none" id="error-title">Помилка! Ця книга вже додана.</div>
+        </div>
+        <div class="mb-3">
+            <label for="book-pages" class="form-label">Кількість сторінок</label>
+            <input type="number" id="book-pages" class="form-control" min="1" required>
+        </div>
+        <div class="mb-3">
+            <label for="book-genre" class="form-label">Жанр</label>
+            <select id="book-genre" class="form-control" required>
+                <option value="">Виберіть жанр</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="book-author" class="form-label">Автор</label>
+            <select id="book-author" class="form-control" required>
+                <option value="">Виберіть автора</option>
+            </select>
+        </div>
+        <button class="btn btn-primary hide-book-form m-1">Сховати форму</button>
+        <button type="submit" class="btn btn-primary m-1">Додати книгу</button>
+    </form>
+</div>
+<!-- /FORM ADD BOOK -->

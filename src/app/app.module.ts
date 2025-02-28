@@ -7,6 +7,7 @@ import { AuthorsComponent } from './components/authors/authors.component';
 import { DetailsComponent } from './components/details/details.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { AddAuthorComponent } from './components/add-author/add-author.component';
+import { AddBookComponent } from './components/add-book/add-book.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { AddAuthorComponent } from './components/add-author/add-author.component
     AuthorsComponent,
     DetailsComponent,
     ButtonsComponent,
-    AddAuthorComponent
+    AddAuthorComponent,
+    AddBookComponent
   ],
   imports: [
     BrowserModule,
