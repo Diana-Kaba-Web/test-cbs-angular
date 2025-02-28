@@ -67,6 +67,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.authors = this.localstorageService.loadFromLocalStorage();
+    this.genres = this.localstorageService.loadGenresFromLocalStorage();
     this.fillStaticInfo();
     this.authorsService.makeRows(this.authors);
 
