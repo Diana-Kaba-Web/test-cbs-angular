@@ -118,5 +118,19 @@ export class AppComponent {
     const hideGenre = document.querySelector('.hide-list');
     if(!hideGenre) return;
     hideGenre.addEventListener('click', this.genresService.hideListOfGenres);
+
+    const addGenre = document.querySelector('.add-genre');
+    if(!addGenre) return;
+    addGenre.addEventListener('click', this.genresService.showAddGenreForm);
+
+    const hideGenreForm = document.querySelector('.hide-genre-form');
+    if(!hideGenreForm) return;
+
+    hideGenreForm.addEventListener('click', this.genresService.hideAddGenreForm);
+
+    const addGenreForm = document.querySelector('#add-genre-form');
+    if(!addGenreForm) return;
+
+    addGenreForm.addEventListener('submit', (e) => this.genresService.addGenre(e, this.genres));
   }
 }
