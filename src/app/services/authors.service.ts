@@ -3,9 +3,17 @@ import { Author } from '../classes/author';
 import { ListenersService } from './listeners.service';
 import { LocalstorageService } from './localstorage.service';
 
+export interface updatedData {
+  lastName: string;
+  firstName: string;
+  middleName: string;
+  birthYear: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthorsService {
 
   constructor(
@@ -130,5 +138,71 @@ export class AuthorsService {
     authors.forEach((author, index) => {
       dropdown.innerHTML += `<option value="${index}">${author.firstName} ${author.lastName}</option>`;
     });
+  }
+
+  hideEditAuthorForm() {
+    const authorFormSection = document.querySelector(".author-edit-form");
+    if (!authorFormSection) return;
+    authorFormSection.classList.add("d-none");
+  }
+
+  showEditAuthorForm(authors: Author[], index: number) {
+    const author = authors[index];
+    const authorFormSection = document.querySelector(".author-edit-form");
+    if (!authorFormSection) return;
+    authorFormSection.classList.remove("d-none");
+    authorFormSection.setAttribute("data-author-index", index.toString());
+
+    console.log(author);
+
+    const authorLastname: HTMLInputElement | null = document.getElementById("author-lastname-edit") as HTMLInputElement;
+    const authorMiddlename: HTMLInputElement | null = document.getElementById("author-middlename-edit") as HTMLInputElement;
+    const authorFirstname: HTMLInputElement | null = document.getElementById("author-firstname-edit") as HTMLInputElement;
+    const authorYearbirth: HTMLInputElement | null = document.getElementById("author-yearbirth-edit") as HTMLInputElement;
+    if (!authorLastname) return;
+    if (!authorMiddlename) return;
+    if (!authorFirstname) return;
+    if (!authorYearbirth) return;
+
+    authorLastname.value = author.lastName;
+    authorFirstname.value = author.firstName;
+    authorMiddlename.value = author.middleName || '';
+    authorYearbirth.value = author.birthYear.toString();
+
+    this.listenersService.addListeners(authors);
+  }
+
+  editAuthor(authors: Author[], index: number, updatedData: updatedData) {
+    const isValid = this.validateTextField(updatedData.lastName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$", "Прізвище")
+      && this.validateTextField(updatedData.firstName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$", "Ім'я")
+      && (updatedData.middleName === '' || this.validateTextField(updatedData.middleName ? updatedData.middleName : '', "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{0,50}$", "По батькові"));
+
+    if (!isValid)
+      return;
+
+    authors[index].lastName = updatedData.lastName.trim();
+    authors[index].firstName = updatedData.firstName.trim();
+    authors[index].middleName = updatedData.middleName?.trim() ? updatedData.middleName?.trim() : '';
+    const yearDate = Number(updatedData.birthYear);
+
+
+    if (yearDate < 1500 || yearDate > new Date().getFullYear()) {
+      const errorYear = document.getElementById("error-year-edit");
+      if (!errorYear) return;
+      errorYear.classList.remove("d-none");
+      return;
+    } else {
+      const errorYear = document.getElementById("error-year-edit");
+      if (!errorYear) return;
+      errorYear.classList.add("d-none");
+    }
+
+    authors[index].birthYear = yearDate;
+
+    this.localstorageService.saveToLocalStorage(authors);
+    this.makeRows(authors);
+
+    this.hideEditAuthorForm();
+    this.listenersService.addListeners(authors);
   }
 }

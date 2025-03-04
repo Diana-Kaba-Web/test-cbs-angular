@@ -112,25 +112,76 @@ export class AppComponent {
     });
 
     const showGenres = document.querySelector('.show-genres');
-    if(!showGenres) return;
+    if (!showGenres) return;
     showGenres.addEventListener('click', () => this.genresService.showGenres());
 
     const hideGenre = document.querySelector('.hide-list');
-    if(!hideGenre) return;
+    if (!hideGenre) return;
     hideGenre.addEventListener('click', this.genresService.hideListOfGenres);
 
     const addGenre = document.querySelector('.add-genre');
-    if(!addGenre) return;
+    if (!addGenre) return;
     addGenre.addEventListener('click', this.genresService.showAddGenreForm);
 
     const hideGenreForm = document.querySelector('.hide-genre-form');
-    if(!hideGenreForm) return;
+    if (!hideGenreForm) return;
 
     hideGenreForm.addEventListener('click', this.genresService.hideAddGenreForm);
 
     const addGenreForm = document.querySelector('#add-genre-form');
-    if(!addGenreForm) return;
+    if (!addGenreForm) return;
 
     addGenreForm.addEventListener('submit', (e) => this.genresService.addGenre(e, this.genres));
+
+    const deleteBookContainer = document.querySelector(".delete-book");
+    if (!deleteBookContainer) return;
+
+    deleteBookContainer.addEventListener("click", () => this.booksService.showDeleteBookForm());
+
+    const deleteBookForm = document.getElementById("delete-book-form");
+    if (!deleteBookForm) return;
+
+    deleteBookForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const bookIndexInput = document.getElementById("book-index") as HTMLInputElement;
+      if (!bookIndexInput) return;
+
+      const authorIndex = Number(deleteBookForm.getAttribute("data-author-index"));
+      if (isNaN(authorIndex)) return;
+
+      this.booksService.deleteBookByIndex(event, this.authors, authorIndex);
+    });
+
+    const hideEditAuthor = document.querySelector(".hide-author-edit-form");
+    if(!hideEditAuthor) return;
+    hideEditAuthor.addEventListener("click", this.authorsService.hideEditAuthorForm);
+
+    const authorEditForm = document.querySelector("#author-edit-form");
+    const authorEditContainer = document.querySelector(".author-edit-form");
+    const authorLastname: HTMLInputElement | null = document.getElementById("author-lastname-edit") as HTMLInputElement;
+    const authorMiddlename: HTMLInputElement | null = document.getElementById("author-middlename-edit") as HTMLInputElement;
+    const authorFirstname: HTMLInputElement | null = document.getElementById("author-firstname-edit") as HTMLInputElement;
+    const authorYearbirth: HTMLInputElement | null = document.getElementById("author-yearbirth-edit") as HTMLInputElement;
+    if(!authorEditForm) return;
+    if(!authorEditContainer) return;
+    if(!authorLastname) return;
+    if(!authorMiddlename) return;
+    if(!authorFirstname) return;
+    if(!authorYearbirth) return;
+
+
+    authorEditForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const index = authorEditContainer.getAttribute("data-author-index");
+      const updatedData = {
+        lastName: authorLastname.value,
+        firstName: authorFirstname.value,
+        middleName: authorMiddlename.value,
+        birthYear: authorYearbirth.value
+      };
+
+      this.authorsService.editAuthor(this.authors, Number(index), updatedData);
+    });
   }
 }

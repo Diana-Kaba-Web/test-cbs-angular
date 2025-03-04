@@ -6,8 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthorsComponent } from './components/authors/authors.component';
 import { DetailsComponent } from './components/details/details.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
-import { AddAuthorComponent } from './components/add-author/add-author.component';
-import { AddBookComponent } from './components/add-book/add-book.component';
+import { BookComponent } from './components/book/book.component';
 import { GenresComponent } from './components/genres/genres.component';
 
 @NgModule({
@@ -16,8 +15,7 @@ import { GenresComponent } from './components/genres/genres.component';
     AuthorsComponent,
     DetailsComponent,
     ButtonsComponent,
-    AddAuthorComponent,
-    AddBookComponent,
+    BookComponent,
     GenresComponent
   ],
   imports: [

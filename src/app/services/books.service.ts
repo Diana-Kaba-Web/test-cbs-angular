@@ -5,6 +5,7 @@ import { AuthorsService } from './authors.service';
 import { Book } from '../classes/books';
 import { LocalstorageService } from './localstorage.service';
 import { ListenersService } from './listeners.service';
+import { DetailsService } from './details.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class BooksService {
   constructor(
     private authorsService: AuthorsService,
     private localstorageService: LocalstorageService,
-    private listenersService: ListenersService) { }
+    private listenersService: ListenersService,
+    private detailsService: DetailsService) { }
 
   addBook(event: Event, authors: Author[], genres: Genre[]) {
     event.preventDefault();
@@ -85,13 +87,61 @@ export class BooksService {
 
   showBookForm() {
     const bookFormSection = document.querySelector(".book-form");
-    if(!bookFormSection) return;
+    if (!bookFormSection) return;
     bookFormSection.classList.remove("d-none");
   }
 
   hideBookForm() {
     const bookFormSection = document.querySelector(".book-form");
-    if(!bookFormSection) return;
+    if (!bookFormSection) return;
     bookFormSection.classList.add("d-none");
+  }
+
+  deleteBookByIndex(event: Event, authors: Author[], authorIndex: number) {
+    event.preventDefault();
+
+    const bookIndex: HTMLInputElement | null = document.getElementById("book-index") as HTMLInputElement;
+    if (!bookIndex) return;
+    if (Number(bookIndex.value) < 0 || Number(bookIndex.value) >= authors[authorIndex].books.length) {
+      const errorBook = document.getElementById("error-book-index");
+      if (!errorBook) return;
+
+      errorBook.classList.remove("d-none");
+      return;
+    } else {
+      const errorBook = document.getElementById("error-book-index");
+      if (!errorBook) return;
+
+      errorBook.classList.add("d-none");
+    }
+
+    const isSure = confirm("Ви точно бажаєте видалити цю книгу?");
+    if (isSure) {
+      authors[authorIndex].books.splice(Number(bookIndex.value), 1);
+      authors[authorIndex].countOfBooks--;
+      this.localstorageService.saveToLocalStorage(authors);
+      this.detailsService.showAuthorDetails(authors, authorIndex);
+      this.authorsService.makeRows(authors);
+
+      const deleteForm: HTMLFormElement | null = document.querySelector("#delete-book-form");
+      const deleteFormContainer = document.querySelector(".delete-book-form");
+      if (!deleteForm) return;
+      if (!deleteFormContainer) return;
+
+      deleteFormContainer.classList.add("d-none");
+      deleteForm.reset();
+      this.listenersService.addListeners(authors);
+    } else {
+      const deleteFormContainer = document.querySelector(".delete-book-form");
+      if (!deleteFormContainer) return;
+      deleteFormContainer.classList.add("d-none");
+    }
+  }
+
+  showDeleteBookForm() {
+    const deleteBook = document.querySelector(".delete-book-form");
+    if (!deleteBook) return;
+
+    deleteBook.classList.remove("d-none");
   }
 }
