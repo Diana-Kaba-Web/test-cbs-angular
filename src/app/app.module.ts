@@ -8,6 +8,7 @@ import { DetailsComponent } from './components/details/details.component';
 import { ButtonsComponent } from './components/buttons/buttons.component';
 import { BookComponent } from './components/book/book.component';
 import { GenresComponent } from './components/genres/genres.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { GenresComponent } from './components/genres/genres.component';
     DetailsComponent,
     ButtonsComponent,
     BookComponent,
-    GenresComponent
+    GenresComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

@@ -9,6 +9,7 @@ import { ListenersService } from './services/listeners.service';
 import { LocalstorageService } from './services/localstorage.service';
 import { BooksService } from './services/books.service';
 import { GenresService } from './services/genres.service';
+import { SearchService } from './services/search.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +30,8 @@ export class AppComponent {
     private listenersService: ListenersService,
     private localstorageService: LocalstorageService,
     private booksService: BooksService,
-    private genresService: GenresService) { }
+    private genresService: GenresService,
+    private searchService: SearchService) { }
 
   fillStaticInfo() {
     if (this.authors.length === 0 && this.genres.length === 0) {
@@ -227,10 +229,34 @@ export class AppComponent {
     hideEditBook.addEventListener("click", this.booksService.hideEditBookForm);
 
     const bookEditForm = document.getElementById("book-edit-form");
-    if(!bookEditForm) return;
+    if (!bookEditForm) return;
     bookEditForm.addEventListener("submit", (event) => {
       event.preventDefault();
       this.booksService.editBook(this.authors, this.genres);
+    });
+
+    const searchBookBtn = document.getElementById("search-book-button");
+    if (!searchBookBtn) return;
+
+    searchBookBtn.addEventListener("click", () => {
+      const searchTitle: HTMLInputElement = document.getElementById("search-book-title") as HTMLInputElement;
+      if (!searchTitle) return;
+
+      if (searchTitle.value.trim() === "") {
+        alert("Введіть назву книги для пошуку.");
+        return;
+      }
+
+      const results = this.searchService.searchBooks(this.authors, searchTitle.value.trim());
+      this.searchService.renderSearchResults(results);
+
+      document.querySelectorAll(".view-book-details").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const authorIndex = Number((event.currentTarget as HTMLElement).getAttribute("data-author-index"));;
+          const bookIndex = Number((event.currentTarget as HTMLElement).getAttribute("data-book-index"));;
+          this.booksService.showEditBookForm(this.authors, authorIndex.toString(), bookIndex.toString(), this.genres);
+        });
+      });
     });
   }
 }
