@@ -59,7 +59,7 @@ export class AuthorsService {
     // addListeners(authors);
   }
 
-  addAuthor(event: Event, authors: Author[]) {
+  addAuthor(event: Event, authors: Author[]) {  
     event.preventDefault();
 
     const lastName: HTMLInputElement | null = document.getElementById("author-lastname") as HTMLInputElement;
@@ -134,6 +134,8 @@ export class AuthorsService {
   populateAuthorDropdown(authors: Author[]) {
     const dropdown = document.getElementById("book-author");
     if (!dropdown) return;
+
+    dropdown.innerHTML = '<option value="">Виберіть автора</option>';
 
     authors.forEach((author, index) => {
       dropdown.innerHTML += `<option value="${index}">${author.firstName} ${author.lastName}</option>`;
