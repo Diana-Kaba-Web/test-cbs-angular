@@ -17,6 +17,7 @@ import { SearchService } from './services/search.service';
   standalone: false,
   styleUrl: './app.component.css'
 })
+
 export class AppComponent {
   title = 'test-cbs-angular';
   authors: Author[] = [];
@@ -68,16 +69,17 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    // Call methods
     this.authors = this.localstorageService.loadFromLocalStorage();
     this.genres = this.localstorageService.loadGenresFromLocalStorage();
     this.fillStaticInfo();
     this.authorsService.makeRows(this.authors);
-
     this.authorsService.populateAuthorDropdown(this.authors);
     this.genresService.populateGenreDropdown(this.genres, 'book-genre');
-
     this.listenersService.addListeners(this.authors);
 
+    // Add listeners
+    // Show authors
     const btnHide = document.querySelector(".btn-hide");
     if (!btnHide) return;
     btnHide.addEventListener("click", this.detailsService.hideAuthorDetails);
@@ -96,10 +98,12 @@ export class AppComponent {
       this.authorsService.addAuthor(event, this.authors);
     });
 
+    // Sort authors
     const sortAuthors = document.querySelector('.sort-authors');
     if (!sortAuthors) return;
     sortAuthors.addEventListener('click', () => this.authorsService.sortAuthors(this.authors));
 
+    // Add books
     const addBook = document.querySelector(".add-book");
     const hideBook = document.querySelector(".hide-book-form");
     if (!addBook) return;
@@ -113,6 +117,7 @@ export class AppComponent {
       this.booksService.addBook(event, this.authors, this.genres);
     });
 
+    // Show genres
     const showGenres = document.querySelector('.show-genres');
     if (!showGenres) return;
     showGenres.addEventListener('click', () => this.genresService.showGenres());
@@ -121,6 +126,7 @@ export class AppComponent {
     if (!hideGenre) return;
     hideGenre.addEventListener('click', this.genresService.hideListOfGenres);
 
+    // Add genres
     const addGenre = document.querySelector('.add-genre');
     if (!addGenre) return;
     addGenre.addEventListener('click', this.genresService.showAddGenreForm);
@@ -135,6 +141,7 @@ export class AppComponent {
 
     addGenreForm.addEventListener('submit', (e) => this.genresService.addGenre(e, this.genres));
 
+    // Delete books
     const deleteBookContainer = document.querySelector(".delete-book");
     if (!deleteBookContainer) return;
 
@@ -155,6 +162,7 @@ export class AppComponent {
       this.booksService.deleteBookByIndex(event, this.authors, authorIndex);
     });
 
+    // Edit authors
     const hideEditAuthor = document.querySelector(".hide-author-edit-form");
     if (!hideEditAuthor) return;
     hideEditAuthor.addEventListener("click", this.authorsService.hideEditAuthorForm);
@@ -186,6 +194,7 @@ export class AppComponent {
       this.authorsService.editAuthor(this.authors, Number(index), updatedData);
     });
 
+    // Edit books
     const editBook = document.querySelector(".edit-book");
     if (!editBook) return;
 
@@ -235,6 +244,7 @@ export class AppComponent {
       this.booksService.editBook(this.authors, this.genres);
     });
 
+    // Search books
     const searchBookBtn = document.getElementById("search-book-button");
     if (!searchBookBtn) return;
 

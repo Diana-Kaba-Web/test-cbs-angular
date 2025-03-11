@@ -56,7 +56,7 @@ export class AuthorsService {
             <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
         </td>
     </tr>`;
-    // addListeners(authors);
+    this.listenersService.addListeners(authors);
   }
 
   addAuthor(event: Event, authors: Author[]) {  
