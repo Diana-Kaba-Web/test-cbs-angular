@@ -41,3 +41,46 @@
     </form>
 </div>
 <!-- /FORM DELETE BOOK -->
+<!-- FORM EDIT BOOK -->
+<div class="container mt-4 p-5 d-none book-edit-form">
+    <h3>Редагувати книгу</h3>
+    <form id="book-edit-form">
+        <div class="mb-3">
+            <label for="book-title-edit" class="form-label">Назва книги</label>
+            <input type="text" id="book-title-edit" class="form-control" required>
+            <div class="mt-2 alert alert-danger d-none" id="error-title-edit">Помилка! Ця книга вже додана.</div>
+        </div>
+        <div class="mb-3">
+            <label for="book-pages-edit" class="form-label">Кількість сторінок</label>
+            <input type="number" id="book-pages-edit" class="form-control" min="1" required>
+        </div>
+        <div class="mb-3">
+            <label for="book-genre-edit" class="form-label">Жанр</label>
+            <select id="book-genre-edit" class="form-control" required>
+                <option value="">Виберіть жанр</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="book-author-edit" class="form-label">Автор</label>
+            <select id="book-author-edit" class="form-control" required>
+                <option value="">Виберіть автора</option>
+            </select>
+        </div>
+        <button class="btn btn-primary hide-edit-book-form m-1">Сховати форму</button>
+        <button type="submit" class="btn btn-primary m-1">Зберегти зміни</button>
+    </form>
+</div>
+<!-- /FORM EDIT BOOK -->
+<!-- FORM INDEX BOOK -->
+<div class="container mt-4 p-5 d-none book-index-form">
+    <h3>Виберіть індекс книги для редагування</h3>
+    <form id="book-index-form">
+        <div class="mb-3">
+            <label for="book-index-edit" class="form-label">Індекс книги</label>
+            <input type="number" id="book-index-edit" class="form-control" min="0" required>
+            <div class="mt-2 alert alert-danger d-none" id="error-book-index-edit">Помилка! Невірний індекс книги.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Продовжити</button>
+    </form>
+</div>
+<!-- /FORM INDEX BOOK -->

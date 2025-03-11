@@ -144,4 +144,136 @@ export class BooksService {
 
     deleteBook.classList.remove("d-none");
   }
+
+  hideEditBookForm() {
+    const bookEditFormSection = document.querySelector(".book-edit-form");
+    if (!bookEditFormSection) return;
+    bookEditFormSection.classList.add("d-none");
+  }
+
+  editBook(authors: Author[], genres: Genre[]) {
+    const bookEditFormSection = document.querySelector(".book-edit-form");
+    const bookGenre: HTMLInputElement | null = document.getElementById("book-genre-edit") as HTMLInputElement;
+    const bookTitle: HTMLInputElement | null = document.getElementById("book-title-edit") as HTMLInputElement;
+    const bookPages: HTMLInputElement | null = document.getElementById("book-pages-edit") as HTMLInputElement;
+    const bookAuthor: HTMLInputElement | null = document.getElementById("book-author-edit") as HTMLInputElement;
+    if (!bookEditFormSection) return;
+    if (!bookGenre) return;
+    if (!bookTitle) return;
+    if (!bookPages) return;
+    if (!bookAuthor) return;
+
+    const authorIndex = Number(bookEditFormSection.getAttribute("data-author-index"));
+    const bookIndex = Number(bookEditFormSection.getAttribute("data-book-index"));
+    const genreIndex = Number(bookGenre.value);
+    const genre = genres[genreIndex];
+    const updatedTitle = bookTitle.value.trim();
+    const updatedPages = Number(bookPages.value);
+    const updatedAuthorIndex = Number(bookAuthor.value);
+
+    if (isNaN(genreIndex) || genreIndex < 0 || genreIndex >= genres.length) {
+      alert("Виберіть коректний жанр.");
+      return;
+    }
+
+    if (isNaN(authorIndex) || authorIndex < 0 || authorIndex >= authors.length) {
+      alert("Виберіть коректного автора.");
+      return;
+    }
+
+    if (updatedPages <= 0 || updatedPages > 10000) {
+      alert("Кількість сторінок має бути між 1 і 10 000.");
+      return;
+    }
+
+    const isValid = this.authorsService.validateTextField(
+      updatedTitle,
+      "^[А-Яа-яІіЇїЄєҐґA-Za-z0-9\\s'-]{2,100}$",
+      "Назва книги"
+    );
+
+    if (!isValid) return;
+
+    const isDuplicate = authors[updatedAuthorIndex].books.some(
+      (book, index) => book.title.toLowerCase() === updatedTitle.toLowerCase() && index !== bookIndex
+    );
+
+    if (isDuplicate) {
+      const errorTitle = document.getElementById("error-title-edit");
+      if (!errorTitle) return;
+      errorTitle.classList.remove("d-none");
+      return;
+    } else {
+      const errorTitle = document.getElementById("error-title-edit");
+      if (!errorTitle) return;
+      errorTitle.classList.add("d-none");
+    }
+
+    if (authorIndex !== updatedAuthorIndex) {
+      const [book] = authors[authorIndex].books.splice(bookIndex, 1);
+      authors[updatedAuthorIndex].books.push(book);
+    }
+
+    const book = authors[updatedAuthorIndex].books[authorIndex === updatedAuthorIndex ? bookIndex : authors[updatedAuthorIndex].books.length - 1];
+    book.title = updatedTitle;
+    book.pages = updatedPages;
+    book.genre = genre.name;
+
+    this.localstorageService.saveToLocalStorage(authors);
+
+    this.authorsService.makeRows(authors);
+    this.hideEditBookForm();
+    this.listenersService.addListeners(authors);
+  }
+
+  showEditBookForm(authors: Author[], authorIndex: string, bookIndex: string, genres: Genre[]) {
+    const book = authors[Number(authorIndex)].books[Number(bookIndex)];
+    const bookEditFormSection = document.querySelector(".book-edit-form");
+    if (!bookEditFormSection) return;
+
+    bookEditFormSection.classList.remove("d-none");
+    bookEditFormSection.setAttribute("data-author-index", authorIndex);
+    bookEditFormSection.setAttribute("data-book-index", bookIndex);
+
+    const bookTitle: HTMLInputElement | null = document.getElementById("book-title-edit") as HTMLInputElement;
+    const bookPages: HTMLInputElement | null = document.getElementById("book-pages-edit") as HTMLInputElement;
+    if (!bookTitle) return;
+    if (!bookPages) return;
+
+    bookTitle.value = book.title;
+    bookPages.value = book.pages.toString();
+
+    const bookAuthorSelect = document.getElementById("book-author-edit");
+    if (!bookAuthorSelect) return;
+    bookAuthorSelect.innerHTML = '';
+    bookAuthorSelect.innerHTML = authors
+      .map((author, index) => {
+        const selected = index === parseInt(authorIndex, 10) ? "selected" : "";
+        return `<option value="${index}" ${selected}>${author.firstName} ${author.lastName}</option>`;
+      })
+      .join("");
+
+    const genreDropdown = document.getElementById("book-genre-edit");
+    if (!genreDropdown) return;
+    genreDropdown.innerHTML = '';
+    genreDropdown.innerHTML = genres
+      .map((genre, index) => {
+        const selected = genre.name === book.genre ? "selected" : "";
+        return `<option value="${index}" ${selected}>${genre.name}</option>`;
+      })
+      .join("");
+  }
+
+  showBookIndexForm(authorIndex: string) {
+    const bookIndexFormSection = document.querySelector(".book-index-form");
+    if (!bookIndexFormSection) return;
+    bookIndexFormSection.classList.remove("d-none");
+    bookIndexFormSection.setAttribute("data-author-index", authorIndex);
+  }
+
+  hideBookIndexForm() {
+    const bookIndexFormSection = document.querySelector(".book-index-form");
+    if (!bookIndexFormSection) return;
+    bookIndexFormSection.classList.add("d-none");
+  }
 }

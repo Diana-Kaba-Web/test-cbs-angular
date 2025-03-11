@@ -154,7 +154,7 @@ export class AppComponent {
     });
 
     const hideEditAuthor = document.querySelector(".hide-author-edit-form");
-    if(!hideEditAuthor) return;
+    if (!hideEditAuthor) return;
     hideEditAuthor.addEventListener("click", this.authorsService.hideEditAuthorForm);
 
     const authorEditForm = document.querySelector("#author-edit-form");
@@ -163,12 +163,12 @@ export class AppComponent {
     const authorMiddlename: HTMLInputElement | null = document.getElementById("author-middlename-edit") as HTMLInputElement;
     const authorFirstname: HTMLInputElement | null = document.getElementById("author-firstname-edit") as HTMLInputElement;
     const authorYearbirth: HTMLInputElement | null = document.getElementById("author-yearbirth-edit") as HTMLInputElement;
-    if(!authorEditForm) return;
-    if(!authorEditContainer) return;
-    if(!authorLastname) return;
-    if(!authorMiddlename) return;
-    if(!authorFirstname) return;
-    if(!authorYearbirth) return;
+    if (!authorEditForm) return;
+    if (!authorEditContainer) return;
+    if (!authorLastname) return;
+    if (!authorMiddlename) return;
+    if (!authorFirstname) return;
+    if (!authorYearbirth) return;
 
 
     authorEditForm.addEventListener("submit", (event) => {
@@ -182,6 +182,55 @@ export class AppComponent {
       };
 
       this.authorsService.editAuthor(this.authors, Number(index), updatedData);
+    });
+
+    const editBook = document.querySelector(".edit-book");
+    if (!editBook) return;
+
+    editBook.addEventListener("click", () => {
+      const authorDetails = document.querySelector(".author-details");
+      if (!authorDetails) return;
+      const authorIndex: string = authorDetails.getAttribute("data-author-index") as string;
+      this.booksService.showBookIndexForm(authorIndex);
+    });
+
+    const bookIndexForm = document.getElementById("book-index-form");
+    if (!bookIndexForm) return;
+
+    bookIndexForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const bookIndexFormSection = document.querySelector(".book-index-form");
+      if (!bookIndexFormSection) return;
+      const authorIndex: string = bookIndexFormSection.getAttribute("data-author-index") as string;
+      const bookIndexEdit: HTMLInputElement = document.getElementById("book-index-edit") as HTMLInputElement;
+      if (!bookIndexEdit) return;
+      const bookIndex = Number(bookIndexEdit.value);
+
+      if (isNaN(bookIndex) || bookIndex < 0 || bookIndex >= this.authors[Number(authorIndex)].books.length) {
+        const errorBookIndex = document.getElementById("error-book-index-edit");
+        if (!errorBookIndex) return;
+        errorBookIndex.classList.remove("d-none");
+        return;
+      } else {
+        const errorBookIndex = document.getElementById("error-book-index-edit");
+        if (!errorBookIndex) return;
+        errorBookIndex.classList.add("d-none");
+      }
+
+      this.booksService.hideBookIndexForm();
+      this.booksService.showEditBookForm(this.authors, authorIndex, bookIndex.toString(), this.genres);
+    });
+
+    const hideEditBook = document.querySelector(".hide-edit-book-form");
+    if (!hideEditBook) return;
+    hideEditBook.addEventListener("click", this.booksService.hideEditBookForm);
+
+    const bookEditForm = document.getElementById("book-edit-form");
+    if(!bookEditForm) return;
+    bookEditForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      this.booksService.editBook(this.authors, this.genres);
     });
   }
 }
